@@ -32,12 +32,13 @@ app.use(cors())
 // Create User
 app.post('/register', async (req, res) => {
     try {
-        const { email, userName, password } = req.body
+        const { email, username, password } = req.body
         const hashedPassword = await bcrypt.hash(password, 10)
-        const newUser = new usersCollection({ email, userName, password: hashedPassword })
+        const newUser = new usersCollection({ email, username, password: hashedPassword })
         await newUser.save()
-        res.status(201).json({message: "User create successfully"})
+        res.status(201).json({message: `User ${username} create successfully`})
     } catch(error) {
+        console.error(error)
         res.status(500).json({error: "Error creating user"})
     }
 })
@@ -55,8 +56,8 @@ app.get('/users', async (req,res) => {
 // Login User
 app.post('/login', async (req,res) => {
     try {
-        const { userName, password } = req.body
-        const user = await usersCollection.findOne({ userName })
+        const { username, password } = req.body
+        const user = await usersCollection.findOne({ username })
         console.log('yuh')
         if(!user) {
             console.log('no user')
@@ -73,7 +74,7 @@ app.post('/login', async (req,res) => {
             console.log("Secret Key not defined in environment variables")
             throw new Error("There's a problem on our end")
         }
-        res.status(200).json({message: `User ${userName} logged in`})
+        res.status(200).json({message: `User ${username} logged in`})
     } catch(error) {
         if(error instanceof Error){
             res.status(500).json({message: error.message})
