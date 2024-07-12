@@ -3,7 +3,6 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom"
 
 const Signup = () => {
-    const [user, setUser] = useState("")
     const[email, setEmail] = useState("")
     const[username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -38,7 +37,7 @@ const Signup = () => {
                 fetchUsers()
                 navigate('/login')
             })
-            .catch(error => {
+            .catch(() => {
                 console.log('Unable to register user')
             })
     }
